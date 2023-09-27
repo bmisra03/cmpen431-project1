@@ -28,6 +28,30 @@ totalDiff = sum(diff(:));
 fprintf('difference between expected and observed values in layer 3 is %0.2f\n', ...
         totalDiff);
 
+%check the difference between expected and observed values in layer 4
+computed = convolve(computed,filterbanks{4},biasvectors{4});
+expected = layerResults{4};
+diff = (computed-expected).^2;
+totalDiff = sum(diff(:));
+fprintf('difference between expected and observed values in layer 4 is %0.2f\n', ...
+        totalDiff);
+
+%check the difference between expected and observed values in layer 5
+computed = relu(computed);
+expected = layerResults{5};
+diff = (computed-expected).^2;
+totalDiff = sum(diff(:));
+fprintf('difference between expected and observed values in layer 5 is %0.2f\n', ...
+        totalDiff);
+
+%check the difference between expected and observed values in layer 6
+computed = maxPool(computed);
+expected = layerResults{6};
+diff = (computed-expected).^2;
+totalDiff = sum(diff(:));
+fprintf('difference between expected and observed values in layer 6 is %0.2f\n', ...
+        totalDiff);
+
 %{
 %sample code to show image and access expected results
 figure; imagesc(imrgb); truesize(gcf,[64 64]);
