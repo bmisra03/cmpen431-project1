@@ -4,54 +4,60 @@ load 'debuggingTest.mat'
 %loading this file defines filterbanks and biasvectors
 load 'CNNparameters.mat'
 
-%check the difference between expected and observed values in layer 1
-computed = imnormalize(imrgb);
-expected = layerResults{1};
-diff = (computed-expected).^2;
-totalDiff = sum(diff(:));
-fprintf('difference between expected and observed values in layer 1 is %0.2f\n', ...
-        totalDiff);
+computed;
 
-%check the difference between expected and observed values in layer 2
-computed = convolve(computed,filterbanks{2},biasvectors{2});
-expected = layerResults{2};
-diff = (computed-expected).^2;
-totalDiff = sum(diff(:));
-fprintf('difference between expected and observed values in layer 2 is %0.2f\n', ...
-        totalDiff);
+for d=1:length(layertypes)
+    layer = layertypes{d};
+    if strcmp(layer,'imnormalize')
+        computed = imnormalize(imrgb);
+        expected = layerResults{d};
+        diff = (computed-expected).^2;
+        totalDiff = sum(diff(:));
+        fprintf('difference between expected and observed values in layer %d is %0.2f\n', ...
+                d, totalDiff);
+    end
+    if strcmp(layer,'convolve')
+        computed = convolve(computed,filterbanks{d},biasvectors{d});
+        expected = layerResults{d};
+        diff = (computed-expected).^2;
+        totalDiff = sum(diff(:));
+        fprintf('difference between expected and observed values in layer %d is %0.2f\n', ...
+                d,totalDiff);
+    end
+    if strcmp(layer,'relu')
+        computed = relu(computed);
+        expected = layerResults{d};
+        diff = (computed-expected).^2;
+        totalDiff = sum(diff(:));
+        fprintf('difference between expected and observed values in layer %d is %0.2f\n', ...
+                d,totalDiff);
+    end
+    if strcmp(layer,'maxpool')
+        computed = maxPool(computed);
+        expected = layerResults{d};
+        diff = (computed-expected).^2;
+        totalDiff = sum(diff(:));
+        fprintf('difference between expected and observed values in layer %d is %0.2f\n', ...
+                d,totalDiff);
+    end
+    if strcmp(layer,'fullconnect')
+        computed = fullConnect(computed,filterbanks{d},biasvectors{d});
+        expected = layerResults{d};
+        diff = (computed-expected).^2;
+        totalDiff = sum(diff(:));
+        fprintf('difference between expected and observed values in layer %d is %0.2f\n', ...
+                d,totalDiff);
+    end
+    if strcmp(layer,'softmax')
+        computed = softmax(computed);
+        expected = layerResults{d};
+        diff = (computed-expected).^2;
+        totalDiff = sum(diff(:));
+        fprintf('difference between expected and observed values in layer %d is %0.2f\n', ...
+                d,totalDiff);
+    end
 
-%check the difference between expected and observed values in layer 3
-computed = relu(computed);
-expected = layerResults{3};
-diff = (computed-expected).^2;
-totalDiff = sum(diff(:));
-fprintf('difference between expected and observed values in layer 3 is %0.2f\n', ...
-        totalDiff);
-
-%check the difference between expected and observed values in layer 4
-computed = convolve(computed,filterbanks{4},biasvectors{4});
-expected = layerResults{4};
-diff = (computed-expected).^2;
-totalDiff = sum(diff(:));
-fprintf('difference between expected and observed values in layer 4 is %0.2f\n', ...
-        totalDiff);
-
-%check the difference between expected and observed values in layer 5
-computed = relu(computed);
-expected = layerResults{5};
-diff = (computed-expected).^2;
-totalDiff = sum(diff(:));
-fprintf('difference between expected and observed values in layer 5 is %0.2f\n', ...
-        totalDiff);
-
-%check the difference between expected and observed values in layer 6
-computed = maxPool(computed);
-expected = layerResults{6};
-diff = (computed-expected).^2;
-totalDiff = sum(diff(:));
-fprintf('difference between expected and observed values in layer 6 is %0.2f\n', ...
-        totalDiff);
-
+end
 %{
 %sample code to show image and access expected results
 figure; imagesc(imrgb); truesize(gcf,[64 64]);
